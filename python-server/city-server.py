@@ -155,7 +155,7 @@ def getDestinations():
         try:
             destPositions = [
                 {"id": str(a.unique_id), "x": x, "y": 0.99, "z": y}
-                for cell_contents, (x, y) in cityModel.grid.coord_iter()
+                for cell_contents, x, y in cityModel.grid.coord_iter()
                 for a in cell_contents if isinstance(a, Destination)
             ]
 
