@@ -107,7 +107,9 @@ class Object3D {
 }
 
 // Define la URI del servidor de agentes
-const agent_server_uri = "http://localhost:8585/";
+// const agent_server_uri = "http://localhost:8585/";
+const agent_server_uri = "https://traffic-simulation-webgl.onrender.com/";
+
 
 // Inicializa arrays para almacenar agentes y otros objetos
 let agents = [];
