@@ -1,4 +1,7 @@
 Flask
 flask-cors
-mesa
+mesa==1.2.1
 numpy
+pandas
+scipy
+tqdm
