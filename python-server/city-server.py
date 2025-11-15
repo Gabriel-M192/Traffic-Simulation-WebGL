@@ -2,7 +2,8 @@
 # Script for managing the flask server that sends data to the vite server
 # to render the sent data in WebGL
 # 24/11/2024
-
+import traceback
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from city_agents.model import CityModel 
@@ -54,29 +55,31 @@ cors = CORS(app, origins=['http://localhost'])
 def initModel():
     global currentStep, cityModel, numAgents, width, height
 
-    if request.method == 'POST':
-        try:
-            numAgents = 4
-            currentStep = 0
+    try:
+        numAgents = 4
+        currentStep = 0
 
-            print("Initializing model...")
+        print("Initializing model...")
 
-            # Read the base file
-            with open("city_files/2024_base.txt") as f:
-                lines = f.readlines()
-                width = len(lines[0]) - 1
-                height = len(lines)
+        # Ruta absoluta al archivo base
+        base_path = os.path.join(os.path.dirname(__file__), "city_files", "2024_base.txt")
 
-            print(f"Loaded map: width={width}, height={height}")
+        with open(base_path) as f:
+            lines = f.readlines()
+            width = len(lines[0]) - 1
+            height = len(lines)
 
-            # Create model with width and height
-            cityModel = CityModel(width=width, height=height)
+        print(f"Loaded map: width={width}, height={height}")
 
-            return jsonify({"message": "Model initiated."})
+        # Crear el modelo real
+        cityModel = CityModel(width=width, height=height)
 
-        except Exception as e:
-            print("Error:", e)
-            return jsonify({"message": "Error initializing the model", "error": str(e)}), 500
+        return jsonify({"message": "Model initiated."})
+
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"message": "Error initializing the model", "error": str(e)}), 500
+
 
 
 # This route will be used to get the positions of the car agents
