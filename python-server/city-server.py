@@ -24,6 +24,31 @@ cors = CORS(app, origins=['http://localhost'])
 
 # This route will be used to send the parameters of the simulation to the server.
 # The server expects a POST request with the parameters in JSON.
+# @app.route('/init', methods=['POST'])
+# @cross_origin()
+# def initModel():
+#     global currentStep, cityModel, numAgents, width, height
+
+#     if request.method == 'POST':
+#         try:
+#             numAgents = 4
+#             width = int(request.json.get('width'))
+#             height = int(request.json.get('height'))
+#             currentStep = 0
+
+#             print(request.json)
+#             print(f"Model parameters: {numAgents, width, height}")
+
+#             # Create the model using the parameters sent by the application
+#             cityModel = CityModel()
+
+#             # Return a message saying that the model was created successfully
+#             return jsonify({"message": "Parameters received, model initiated."})
+
+#         except Exception as e:
+#             print(e)
+#             return jsonify({"message": "Error initializing the model"}), 500
+
 @app.route('/init', methods=['POST'])
 @cross_origin()
 def initModel():
@@ -32,22 +57,27 @@ def initModel():
     if request.method == 'POST':
         try:
             numAgents = 4
-            width = int(request.json.get('width'))
-            height = int(request.json.get('height'))
             currentStep = 0
 
-            print(request.json)
-            print(f"Model parameters: {numAgents, width, height}")
+            print("Initializing model...")
 
-            # Create the model using the parameters sent by the application
-            cityModel = CityModel()
+            # Read the base file
+            with open("city_files/2024_base.txt") as f:
+                lines = f.readlines()
+                width = len(lines[0]) - 1
+                height = len(lines)
 
-            # Return a message saying that the model was created successfully
-            return jsonify({"message": "Parameters received, model initiated."})
+            print(f"Loaded map: width={width}, height={height}")
+
+            # Create model with width and height
+            cityModel = CityModel(width=width, height=height)
+
+            return jsonify({"message": "Model initiated."})
 
         except Exception as e:
-            print(e)
-            return jsonify({"message": "Error initializing the model"}), 500
+            print("Error:", e)
+            return jsonify({"message": "Error initializing the model", "error": str(e)}), 500
+
 
 # This route will be used to get the positions of the car agents
 @app.route('/getAgents', methods=['GET'])
