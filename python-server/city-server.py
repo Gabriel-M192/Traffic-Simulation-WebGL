@@ -55,31 +55,29 @@ cors = CORS(app, origins=['http://localhost'])
 def initModel():
     global currentStep, cityModel, numAgents, width, height
 
-    try:
-        numAgents = 4
-        currentStep = 0
+    if request.method == 'POST':
+        try:
+            numAgents = 4
+            currentStep = 0
 
-        print("Initializing model...")
+            print("Initializing model...")
 
-        # Ruta absoluta al archivo base
-        base_path = os.path.join(os.path.dirname(__file__), "city_files", "2024_base.txt")
+            # Leer dimensiones (si quieres imprimirlas)
+            with open("city_files/2024_base.txt") as f:
+                lines = f.readlines()
+                width = len(lines[0]) - 1
+                height = len(lines)
 
-        with open(base_path) as f:
-            lines = f.readlines()
-            width = len(lines[0]) - 1
-            height = len(lines)
+            print(f"Loaded map: width={width}, height={height}")
 
-        print(f"Loaded map: width={width}, height={height}")
+            # Crear el modelo SIN parámetros
+            cityModel = CityModel()
 
-        # Crear el modelo real
-        cityModel = CityModel(width=width, height=height)
+            return jsonify({"message": "Model initiated."})
 
-        return jsonify({"message": "Model initiated."})
-
-    except Exception as e:
-        print("Error:", e)
-        return jsonify({"message": "Error initializing the model", "error": str(e)}), 500
-
+        except Exception as e:
+            print("Error:", e)
+            return jsonify({"message": "Error initializing the model", "error": str(e)}), 500
 
 
 # This route will be used to get the positions of the car agents
