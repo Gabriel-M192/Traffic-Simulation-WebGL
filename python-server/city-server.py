@@ -19,6 +19,7 @@ currentStep = 0
 
 # This application will be used to interact with WebGL
 app = Flask("Traffic Simulation")
+CORS(app)
 cors = CORS(app, origins=['http://localhost'])
 
 # This route will be used to send the parameters of the simulation to the server.
@@ -179,7 +180,12 @@ def updateModel():
             print(f"Exception in updateModel: {e}")
             return jsonify({"message": "Error during step."}), 500
 
-if __name__ == '__main__':
-    # Run the flask server on port 8585
-    app.run(host="localhost", port=8585, debug=False)
+# if __name__ == '__main__':
+#     # Run the flask server on port 8585
+#     app.run(host="localhost", port=8585, debug=False)
+
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
 
