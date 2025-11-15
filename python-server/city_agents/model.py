@@ -28,6 +28,8 @@ class CityModel(Model):
         self.traffic_lights = []
         self.destinations = []  # Lista para almacenar las posiciones de los destinos
         self.graph = {}  # Grafo como lista de adyacencia
+        self.obstacles = []
+
 
         # Variables para el control de generación de agentes
         self.spawned_agents = 0  # Contador de agentes generados
@@ -128,9 +130,9 @@ class CityModel(Model):
                         elif col == "#":
                             agent = Obstacle(f"ob_{r*self.width+c}", self)
                             self.grid.place_agent(agent, cell_pos)
-                            self.static_map[cell_pos[1]][cell_pos[0]] = {
-                                "type": "Obstacle"
-                            }
+                            self.obstacles.append(cell_pos) 
+                            self.static_map[cell_pos[1]][cell_pos[0]] = { "type": "Obstacle" }
+
 
             # Crear los primeros 4 coches en las esquinas
             self.spawn_cars()
