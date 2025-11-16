@@ -114,7 +114,7 @@ def getObstacles():
         try:
             obsPositions = [
                 {"id": str(a.unique_id), "x": x, "y": 1, "z": y}
-                for cell_contents, (x, y) in cityModel.grid.coord_iter()
+                for cell_contents, x, y in cityModel.grid.coord_iter()
                 for a in cell_contents if isinstance(a, Obstacle)
             ]
 
@@ -132,7 +132,7 @@ def getLights():
         try:
             lightPositions = [
                 {"id": str(a.unique_id), "x": x, "y": 2, "z": y, "state": a.state}
-                for cell_contents, (x, y) in cityModel.grid.coord_iter()
+                for cell_contents, x, y in cityModel.grid.coord_iter()
                 for a in cell_contents if isinstance(a, Traffic_Light)
             ]
 
@@ -182,7 +182,7 @@ def getRoads():
         try:
             roadPositions = [
                 {"id": str(a.unique_id), "x": x, "y": 0.999, "z": y, "direction": a.direction}
-                for cell_contents, (x, y) in cityModel.grid.coord_iter()
+                for cell_contents, x, y in cityModel.grid.coord_iter()
                 for a in cell_contents if isinstance(a, Road)
             ]
 
